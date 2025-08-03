@@ -144,6 +144,11 @@ public class Engine implements UpdateLoop.UpdateListener, DrawLoop.DrawListener,
         synchronized (mUpdatables) {
             int updatableCount = mUpdatables.size();
             for (int i = 0; i < updatableCount; i++) {
+                // jcj83429 HACK
+                // Something is removing the mUpdatables inside this loop.
+                // I haven't figured out why.
+                // This stops the crash for now.
+                if (i >= mUpdatables.size()) break;
                 Updatable u = mUpdatables.get(i);
                 if (u.isActive() && u.isRunning()) {
                     u.update(elapsedMillis);
